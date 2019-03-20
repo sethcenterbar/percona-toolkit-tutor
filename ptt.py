@@ -1,95 +1,77 @@
 import click
 import os
+import yaml
 
+supported_scripts = []
+
+def import_docs():
+  with open('docs/tools.yaml') as f:
+    doc = yaml.safe_load(f)
+
+  for tool in doc['tools']:
+    supported_scripts.append(tool['name'])
+
+  return doc
+
+def output_blog_posts(intool):
+  click.echo(click.style('//Blog Posts about ' + intool, fg='green'))
+  try:
+    doc = import_docs()
+    this_tool = None
+    for tool in doc['tools']:
+      if tool['name'] == intool:
+        this_tool = tool
+        break
+    
+    postnum = 1
+    for post in this_tool['blog_posts']:
+      click.echo("\nPost #" + str(postnum))
+      click.echo("    Description: " + post['description'])
+      click.echo("           Link: " + post['link'])
+      postnum = postnum + 1
+
+  except:
+    click.echo("Couldn't find that tool")
+
+  
 @click.group()
-@click.option('--man', is_flag=True, help="Pass this flag to display the manpage.")
-@click.pass_context
-def cli(ctx, man):
-  """percona-toolkit-tutor is a wrapper around percona-toolkit, aimed at making the kit more discoverable.
+def cli():
+  """Percona Toolkit Tutor is a wrapper around percona-toolkit, aimed at making the kit more discoverable.
 
-  /d
-  For more information about a command (pt-find in this example), run the following:
-    ptt pt-find
+    \b
+    To see a list of supported percona-toolkit tools, run the following command:
+      $ ptt tools
+    """
 
+
+@cli.command(help="Show all info about a given tool")
+def info():
   """
-  ctx.ensure_object(dict)
-  ctx.obj['MAN'] = man
+  Info will run all commands to give a great overview of the tool
+  """
+  doc = import_docs()
+  print(doc)
 
-@cli.command('pt-find', help="Find MySQL tables and execute actions, like GNU find.")
-@click.pass_context
-def pt_find(ctx):
-  if ctx.obj['MAN']:
-    click.echo("Manual page will be displayed!")
-  
-@cli.command('pt-summary')
-def pt_summary():
+@cli.command(help="Show examples of a given tool")
+def examples():
   pass
-  
-@cli.command('pt-archiver')
-def pt_archiver():
+
+@cli.command(help="Useful links that reference a given tool")
+@click.argument('tool')
+def blog(tool):
+  """
+  Blog allows you to pass the name of a supported percona-toolkit tool and retrive relevant blog posts about it
+  """
+  output_blog_posts(tool)
+
+@cli.command(help="Useful videos that reference a given tool")
+def video():
   pass
-  
-@cli.command('pt-fingerprint')
-def pt_fingerprint():
-  pass
-  
-@cli.command('pt-show-grants')
-def pt_show_grants():
-  pass
-  
-@cli.command('pt-table-checksum')
-def pt_table_checksum():
-  pass
-  
-@cli.command('pt-config-diff')
-def pt_config_diff():
-  pass
-  
- 
-@cli.command('pt-table-sync')
-def pt_table_sync():
-  pass
- 
-@cli.command('pt-mysql-summary')
-def pt_mysql_summary():
-  pass
- 
-@cli.command('pt-table-usage')
-def pt_table_usage():
-  pass
-  
-@cli.command('pt-diskstats')
-def pt_diskstats():
-  pass
-  
-@cli.command('pt-index-usage')
-def pt_index_usage():
-  pass
-  
-@cli.command('pt-online-schema-change')
-def pt_online_schema_change():
-  pass
-  
-@cli.command('pt-upgrade')
-def pt_upgrade():
-  pass
-  
-@cli.command('pt-duplicate-key-checker')
-def pt_duplicate_key_checker():
-  pass
- 
-@cli.command('pt-variable-advisor')
-def pt_variable_advisor():
-  pass
- 
-@cli.command('pt-query-digest')
-def pt_query_digest():
-  pass
-  
-@cli.command('pt-stalk')
-def pt_stalk():
-  pass
-  
-@cli.command('pt-visual-explain')
-def pt_visual_explain():
-  pass
+
+
+@cli.command(help='List the supported percona-toolkit tools')
+def tools():
+  import_docs()
+
+  for script in supported_scripts:
+    click.echo(script)

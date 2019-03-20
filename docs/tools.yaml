@@ -1,0 +1,36 @@
+tools:
+  - name: pt-archiver
+    summary: Archive rows from a MySQL table into another table or a file.
+    situation: Sometimes you need to archive or delete a large amount of data, but you can't afford a large impact on your production systems. pt-archiver is a great way to do this, because it executes one transaction at a time. It's often used to move data to archive tables, or even to different databases, but you can use it to simply delete rows safely.
+    examples:
+      - description: Archive all rows from oltp_server to olap_server and to a file
+        command: |
+          pt-archiver --source h=oltp_server,D=test,t=tbl --dest h=olap_server \
+            --file '/var/log/archive/%Y-%m-%d-%D.%t'                           \
+            --where "1=1" --limit 1000 --commit-each
+      - description: Purge (delete) orphan rows from child table
+        command: |
+          pt-archiver --source h=host,D=db,t=child --purge \
+            --where 'NOT EXISTS(SELECT * FROM parent WHERE col=child.col)'
+    blog_posts:
+      - description: Want to archive tables? Use Percona Toolkit's pt-archiver
+        link: https://www.percona.com/blog/2013/08/12/want-to-archive-tables-use-pt-archiver/
+      - description: Rescuing a crashed pt-online-schema-change with pt-archiver
+        link: https://www.percona.com/blog/2016/06/30/rescuing-crashed-pt-online-schema-change-pt-archiver/
+
+  - name: pt-something-else
+    summary: Archive rows from a MySQL table into another table or a file.
+    situation: Sometimes you need to archive or delete a large amount of data, but you can't afford a large impact on your production systems. pt-archiver is a great way to do this, because it executes one transaction at a time. It's often used to move data to archive tables, or even to different databases, but you can use it to simply delete rows safely.
+    examples:
+      - description: Archive all rows from oltp_server to olap_server and to a file
+        command: |
+          pt-archiver --source h=oltp_server,D=test,t=tbl --dest h=olap_server \
+            --file '/var/log/archive/%Y-%m-%d-%D.%t'                           \
+            --where "1=1" --limit 1000 --commit-each
+      - description: Purge (delete) orphan rows from child table
+        command: |
+          pt-archiver --source h=host,D=db,t=child --purge \
+            --where 'NOT EXISTS(SELECT * FROM parent WHERE col=child.col)'
+    blog_posts:
+      - description: Want to archive tables? Use Percona Toolkit's pt-archiver
+        link: https://www.percona.com/blog/2013/08/12/want-to-archive-tables-use-pt-archiver/
