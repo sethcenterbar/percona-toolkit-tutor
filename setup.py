@@ -6,6 +6,8 @@ setup(
     py_modules=['ptt'],
     install_requires=[
         'Click',
+        'colorama',
+        'PyYAML'
     ],
     entry_points='''
         [console_scripts]
