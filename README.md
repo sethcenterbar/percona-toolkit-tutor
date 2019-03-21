@@ -16,4 +16,4 @@ My goals with this project are to demonstrate a working knowledge of the followi
 * click (framework)
 
 # ptt in action
-[![asciicast](https://asciinema.org/a/vBt2rgF0ocg7jQjP7D7As2blU.svg)](https://asciinema.org/a/vBt2rgF0ocg7jQjP7D7As2blU)
+[![asciicast](https://asciinema.org/a/Btz13V9cCKJJ64aamaMx3M37N.svg)](https://asciinema.org/a/Btz13V9cCKJJ64aamaMx3M37N)
